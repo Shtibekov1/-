@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="style.css">
+    
+    <title>ЦенОбзор — Сравнение цен на одежду для малозарабатывающих</title>
+    
+</head>
+<body>
+    <header>
+        <h1>ЦенОбзор</h1>
+        <p>Сравнение цен на одежду для малозарабатывающих</p>
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="#search">Поиск</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="search-section" id="search">
+            <h2>Найдите выгодные предложения</h2>
+            <form id="searchForm" onsubmit="return false;">
+                <input type="text" id="category" placeholder="Категория (например, футболка)" />
+                <input type="number" id="maxPrice" placeholder="Максимальная цена" />
+                <button onclick="searchProducts()">Искать</button>
+            </form>
+        </section>
+
+        <section class="products" id="products">
+            <!-- Здесь будут появляться карточки товаров -->
+        </section>
+    </main>
+
+    <footer id="contacts">
+        <p>&copy; 2024 ЦенОбзор. Все права защищены.</p>
+        <p>Контакты: info@cenobzor.ru</p>
+    </footer>
+
+    <script>
+        // Пример данных
+        const productsData = [
+            {
+                title: "Футболка Basic",
+                price: 250,
+               
+            },
+            {
+                title: "Джинсы Slim Fit",
+                price: 1200,
+                
+            },
+            {
+                title: "Куртка демисезонная",
+                price: 3500,
+                
+            },
+            {
+                title: "Платье летнее",
+                price: 900,
+                
+            }
+        ];
+
+        function searchProducts() {
+            const category = document.getElementById('category').value.toLowerCase();
+            const maxPrice = parseFloat(document.getElementById('maxPrice').value);
+            const container = document.getElementById('products');
+            container.innerHTML = '';
+
+            // Фильтрация данных
+            const filtered = productsData.filter(p => {
+                const titleMatch = p.title.toLowerCase().includes(category);
+                const priceMatch = isNaN(maxPrice) || p.price <= maxPrice;
+                return titleMatch && priceMatch;
+            });
+
+            if(filtered.length === 0) {
+                container.innerHTML = '<p>Нет подходящих товаров по вашему запросу.</p>';
+                return;
+            }
+
+            // Отображение результатов
+            filtered.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product';
+
+                card.innerHTML = `
+                    <img src="${product.image}" alt="${product.title}" />
+                    <div class="product-details">
+                        <div class="product-title">${product.title}</div>
+                        <div class="product-price">${product.price} руб.</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Изначально показываем все товары
+        window.onload = searchProducts;
+    </script>
+</body>
+</html>
